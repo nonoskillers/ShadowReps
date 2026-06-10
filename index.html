@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#08090c">
+<title>RE:ARISE</title>
+<style>
+  :root{--bg:#08090c;--bg2:#0d0f15;--surface:#13151d;--surface2:#1b1e29;--line:#262a38;--line2:#333949;
+    --text:#f1f3f8;--muted:#8b91a6;--dim:#5c6177;--accent:#ff5630;--accent2:#ff8a3d;--xp:#ffb02e;--ok:#23c98a;
+    --grad:linear-gradient(135deg,#ff5630,#ff8a3d);}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{display:flex;justify-content:center;min-height:100vh;background:radial-gradient(800px 460px at 50% -8%,#15171f 0%,var(--bg) 62%)}
+  #app{width:100%;max-width:460px;min-height:100vh;position:relative;display:flex;flex-direction:column}
+  .screen{flex:1;padding:22px 18px 100px;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.2px}
+  .eyebrow{font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim)}
+  .logo{font-weight:900;font-size:23px;letter-spacing:1.5px}.logo b{color:var(--accent)}
+  .muted{color:var(--muted)}.dim{color:var(--dim)}.center{text-align:center}
+  .small{font-size:13px}.tiny{font-size:11px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+  .row{display:flex;align-items:center;gap:12px}.between{justify-content:space-between}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:none;border-radius:12px;
+    padding:16px;font-size:15px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#fff;
+    background:var(--grad);cursor:pointer;box-shadow:0 6px 20px rgba(255,86,48,.28);transition:transform .12s,opacity .2s}
+  .btn:active{transform:scale(.98)}
+  .btn.ghost{background:var(--surface2);box-shadow:none;border:1px solid var(--line2);color:var(--text)}
+  .btn.ok{background:linear-gradient(135deg,#23c98a,#19b3a6);box-shadow:0 6px 20px rgba(35,201,138,.25);color:#04221a}
+  .btn.gold{background:linear-gradient(135deg,#ffb02e,#ff7a1a);box-shadow:0 6px 20px rgba(255,176,46,.3);color:#2a1800}
+  .btn.sm{padding:12px;font-size:13px}
+  .pill{display:inline-flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--line2);
+    border-radius:10px;padding:7px 12px;font-size:12px;font-weight:800;letter-spacing:.5px}
+  .tag{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:6px;
+    background:var(--surface2);border:1px solid var(--line2);color:var(--muted)}
+  .rankbadge{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:13px;
+    font-weight:900;font-size:24px;color:#06070b;font-family:Georgia,serif}
+  .progress{height:8px;background:#0a0b10;border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+  .progress>i{display:block;height:100%;background:var(--grad);border-radius:99px;transition:width .6s ease}
+  .xpbar>i{background:linear-gradient(90deg,#ffb02e,#ff7a1a)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px}
+  .stat .lab{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px}
+  .stat .rk{font-size:26px;font-weight:900;font-family:Georgia,serif;line-height:1.1}
+  .ex{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px;margin:10px 0;position:relative}
+  .ex.done{border-color:rgba(35,201,138,.5);background:linear-gradient(180deg,rgba(35,201,138,.06),var(--surface))}
+  .ico{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;
+    background:var(--surface2);border:1px solid var(--line2);color:var(--accent2);flex:0 0 auto}
+  .dots{position:absolute;top:12px;right:10px;background:none;border:none;color:var(--dim);font-size:20px;font-weight:900;cursor:pointer;padding:4px 8px;line-height:.6;letter-spacing:1px}
+  .setdots{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+  .setbtn{flex:1;min-width:60px;background:var(--surface2);border:1px solid var(--line2);border-radius:10px;padding:13px 6px;
+    text-align:center;font-weight:800;cursor:pointer;font-size:13px;letter-spacing:.5px;color:var(--muted);transition:.15s;
+    text-transform:uppercase;display:flex;align-items:center;justify-content:center}
+  .setbtn.ok{background:linear-gradient(135deg,#23c98a,#19b3a6);color:#04221a;border-color:transparent}
+  .nav{position:fixed;bottom:0;left:0;right:0;max-width:460px;margin:0 auto;display:flex;background:rgba(8,9,12,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+  .nav button{flex:1;background:none;border:none;color:var(--dim);padding:13px 0 18px;font-size:10px;font-weight:800;letter-spacing:1px;
+    text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px}
+  .nav button.act{color:var(--accent)}
+  .overlay{position:fixed;inset:0;max-width:460px;margin:0 auto;background:rgba(4,5,8,.78);display:flex;align-items:flex-end;z-index:40;animation:fade .2s}
+  .sheet{width:100%;background:var(--bg2);border-top-left-radius:20px;border-top-right-radius:20px;border:1px solid var(--line);padding:20px;animation:up .28s ease;max-height:80vh;overflow:auto}
+  @keyframes up{from{transform:translateY(50px);opacity:.5}to{transform:none;opacity:1}}
+  .modal{position:fixed;inset:0;max-width:460px;margin:0 auto;background:rgba(4,5,8,.86);display:flex;align-items:center;justify-content:center;padding:22px;z-index:50;animation:fade .22s}
+  .modalbox{background:var(--bg2);border:1px solid var(--line2);border-radius:18px;padding:26px 22px;width:100%;text-align:center}
+  .timer{font-size:58px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:1px;color:var(--ok)}
+  .num{font-size:34px;font-weight:900;font-variant-numeric:tabular-nums}
+  .tree{display:flex;gap:6px;margin-top:12px;overflow-x:auto;padding-bottom:4px}
+  .node{flex:0 0 auto;min-width:78px;text-align:center;padding:9px 6px;border-radius:10px;font-size:10px;border:1px solid var(--line);background:var(--surface2);color:var(--dim);line-height:1.3}
+  .node .nr{font-weight:900;font-size:13px;font-family:Georgia,serif}
+  .node.unlocked{background:var(--grad);color:#fff;border-color:transparent}
+  .node.next{border-color:var(--xp);color:var(--xp)}
+  .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--xp);color:var(--xp);font-weight:800;padding:10px 18px;border-radius:10px;z-index:60;animation:pop .3s;font-size:13px;letter-spacing:.5px}
+  @keyframes pop{from{transform:translate(-50%,-16px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+  .seg{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .seg button{flex:1;min-width:60px;background:var(--surface2);border:1px solid var(--line2);color:var(--text);border-radius:10px;padding:15px 0;font-weight:900;cursor:pointer;font-family:Georgia,serif;font-size:17px}
+  .seg button.sel{background:var(--grad);border-color:transparent;color:#fff}
+  .floaty{position:absolute;font-weight:900;color:var(--xp);pointer-events:none;animation:floaty 1s ease forwards;font-size:15px}
+  @keyframes floaty{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-38px)}}
+  .bigico{display:flex;justify-content:center;color:var(--accent);margin:8px 0}
+  .divider{height:1px;background:var(--line);margin:4px 0}
+  .trial{background:linear-gradient(135deg,rgba(255,176,46,.14),var(--surface));border:1px solid var(--xp)}
+  .bonusbtn{background:linear-gradient(135deg,rgba(255,138,61,.12),var(--surface2));border:1px dashed var(--accent2);color:var(--accent2)}
+  svg{display:block}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+function icon(n,s){s=s||22;var a='width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+ var p={force:'<path d="M13 2 4 14h7l-1 8 10-13h-7l3-7z"/>',
+  puissance:'<polyline points="5 15 12 8 19 15"/><polyline points="5 10 12 3 19 10"/>',
+  endurance:'<path d="M2 12h4l2 6 4-13 2 7h8"/>',controle:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/>',
+  cardio:'<path d="M2 12h4l2 6 4-13 2 7h8"/>',warmup:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  system:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  profile:'<line x1="6" y1="20" x2="6" y2="13"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="9"/>',
+  flame:'<path d="M12 3c1 3 4 4 4 8a4 4 0 0 1-8 0c0-1.5.8-2.6 1.6-3.4C9.7 9 10 10 11 10c.8 0 .8-1.6-.5-5C11.5 4 12 3.5 12 3z"/>',
+  back:'<polyline points="15 18 9 12 15 6"/>',up:'<polyline points="18 15 12 9 6 15"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  bar:'<line x1="4" y1="8" x2="20" y2="8"/><line x1="7" y1="8" x2="7" y2="13"/><line x1="17" y1="8" x2="17" y2="13"/>',
+  star:'<path d="M12 2l2.6 6.6L22 9.2l-5 4.6L18.5 22 12 18.2 5.5 22 7 13.8l-5-4.6 7.4-.6z"/>',
+  trophy:'<path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 4H3v1.5A3.5 3.5 0 0 0 6.5 9M19 4h2v1.5A3.5 3.5 0 0 1 17.5 9"/><line x1="12" y1="13" x2="12" y2="18"/><line x1="8" y1="21" x2="16" y2="21"/>',
+  bolt:'<path d="M13 2 4 14h7l-1 8 10-13h-7l3-7z"/>'};return '<svg '+a+'>'+(p[n]||'')+'</svg>';}
+
+var RANKS=["E","D","C","B","A","S"];
+var RANK_COLORS=["#8a8f9c","#c08043","#cbd0db","#3d7eff","#9b5cff","#ffb02e"];
+var LEVELS_PER_RANK=15;
+var STATS={force:{name:"Strength",ic:"force"},puissance:{name:"Power",ic:"puissance"},endurance:{name:"Endurance",ic:"endurance"},controle:{name:"Control",ic:"controle"}};
+var TREES={
+  pousser:{stat:"force",ic:"force",label:"Push",tiers:[{n:"Knee push-ups",type:"reps"},{n:"Push-ups",type:"reps"},{n:"Diamond push-ups",type:"reps"},{n:"Archer push-ups",type:"reps"},{n:"Pseudo-planche push-ups",type:"reps"},{n:"One-arm push-up",type:"reps"}]},
+  tirer:{stat:"force",ic:"force",label:"Pull",tiers:[{n:"Table rows",type:"reps"},{n:"Negative pull-ups",type:"reps",bar:true},{n:"Pull-ups",type:"reps",bar:true},{n:"Archer pull-ups",type:"reps",bar:true},{n:"One-arm negative",type:"reps",bar:true},{n:"Muscle-up",type:"reps",bar:true}]},
+  jambes:{stat:"puissance",ic:"puissance",label:"Legs",tiers:[{n:"Squats",type:"reps"},{n:"Lunges",type:"reps"},{n:"Jump squats",type:"reps"},{n:"Bulgarian split squats",type:"reps"},{n:"Assisted pistol",type:"reps"},{n:"Pistol squat",type:"reps"}]},
+  gainage:{stat:"endurance",ic:"endurance",label:"Core",tiers:[{n:"Knee plank",type:"time"},{n:"Plank",type:"time"},{n:"Mountain climbers",type:"reps"},{n:"Leg raises",type:"reps"},{n:"Tuck L-sit",type:"time"},{n:"Full L-sit",type:"time"}]},
+  controle:{stat:"controle",ic:"controle",label:"Control",tiers:[{n:"Feet on wall",type:"time"},{n:"Wall handstand",type:"time"},{n:"Handstand hold",type:"time"},{n:"Free handstand",type:"time"},{n:"Handstand push-ups",type:"reps"},{n:"Planche",type:"time"}]}
+};
+var CARDIO=[{n:"High knees",type:"time"},{n:"Burpees",type:"reps"},{n:"Mountain climbers",type:"reps"},{n:"Jumping jacks",type:"reps"}];
+var LENS={0:3,1:4,2:5};
+
+var S=null;var KEY="rearise_en_v2";
+function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}}
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+function freshState(o){return{created:Date.now(),age:o.age,sex:o.sex,exp:o.exp,goal:o.goal,rhythm:o.rhythm,len:o.len,
+  level:1,xp:0,rank:0,streak:0,lastDay:null,hasBar:o.bar===0,
+  tiers:{pousser:o.pushups,tirer:Math.max(0,o.pushups-1),jambes:o.squats,gainage:o.plank,controle:0},
+  quest:null,questDate:null,completedToday:false,sessions:0,totalXP:0,trial:null,bonusToday:0,bonusDate:null};}
+function today(){return new Date().toISOString().slice(0,10);}
+function statTier(st){var f=Object.keys(TREES).filter(function(k){return TREES[k].stat===st;});return Math.round(f.reduce(function(a,k){return a+S.tiers[k];},0)/f.length);}
+function xpForLevel(l){return 100+(l-1)*30;}
+function eligibleRank(){return Math.min(RANKS.length-1,Math.floor(S.level/LEVELS_PER_RANK));}
+function trialPending(){return eligibleRank()>S.rank;}
+function levelsToNextRank(){return (S.rank+1)*LEVELS_PER_RANK-S.level;}
+function addXP(n){S.xp+=n;S.totalXP+=n;while(S.xp>=xpForLevel(S.level)){S.xp-=xpForLevel(S.level);S.level++;}}
+function coef(t){return 1+t*0.35;}
+function perSetXP(e){return Math.max(3,Math.round((e.type==="time"?e.target*0.3:e.target*0.5)*coef(e.tier)));}
+function targetFor(fam,tier){var t=TREES[fam].tiers[tier];if(t.type==="time"){return{type:"time",val:[25,30,20,15,20,15][tier]||20};}return{type:"reps",val:[14,12,10,8,6,4][tier]||8};}
+function mkEx(fam,tier,sets,scale){var tg=targetFor(fam,tier);return{fam:fam,tier:tier,name:TREES[fam].tiers[tier].n,ic:TREES[fam].ic,type:tg.type,target:Math.round(tg.val*(scale||1)),sets:sets||3,doneSets:0,done:false};}
+function warmupEx(){return{fam:"warmup",tier:0,name:"Warm-up: jumping jacks + mobility",ic:"warmup",type:"time",target:60,sets:1,doneSets:0,done:false};}
+function cardioEx(){var c=CARDIO[Math.floor(Math.random()*CARDIO.length)];return{fam:"cardio",tier:0,name:c.n,ic:"cardio",type:c.type,target:c.type==="time"?40:16,sets:1,doneSets:0,done:false};}
+function genQuest(){var n=LENS[S.len]||4;var pool=S.hasBar?["pousser","tirer","jambes","gainage","controle"]:["pousser","jambes","gainage","controle","pousser"];
+  var off=new Date().getDate()%pool.length;var rot=pool.slice(off).concat(pool.slice(0,off));
+  if(S.goal===3&&rot.indexOf("controle")<0)rot[rot.length-1]="controle";
+  var chosen=rot.slice(0,n);var ex=[warmupEx()];chosen.forEach(function(f){ex.push(mkEx(f,S.tiers[f],3,1));});
+  ex.push(cardioEx());if(S.goal===1)ex.push(cardioEx());return ex;}
+function genTrial(){var fams=["pousser","jambes","gainage","controle"];if(S.hasBar)fams[0]="tirer";return fams.map(function(f){return mkEx(f,S.tiers[f],4,1.3);});}
+function ensureDay(){if(S.bonusDate!==today()){S.bonusToday=0;S.bonusDate=today();}if(S.questDate!==today()){S.quest=genQuest();S.questDate=today();S.completedToday=false;}save();}
+
+function app(){return document.getElementById("app");}
+var view="home";
+function toast(m){var t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove();},1500);}
+function render(){if(!S)return renderOnboarding();ensureDay();if(view==="char")renderChar();else if(view==="session")renderSession(false);else if(view==="trial")renderSession(true);else renderHome();}
+
+var ob={step:0,age:null,sex:null,exp:null,goal:null,pushups:null,squats:null,plank:null,bar:null,rhythm:null,len:null};
+var OBQ=[
+ {key:"age",ic:"profile",q:"Age range",sub:"Quick tap.",opts:["Under 18","18 - 29","30 - 44","45 +"]},
+ {key:"sex",ic:"profile",q:"You are",sub:"For calibration.",opts:["Male","Female","Other"]},
+ {key:"exp",ic:"bolt",q:"Training experience",sub:"Be honest.",opts:["Never trained","On and off","Regular","Athlete"]},
+ {key:"goal",ic:"star",q:"Main goal",sub:"Pick one.",opts:["Build muscle","Lose fat","Get stronger","Master skills"]},
+ {key:"pushups",ic:"force",q:"Push-ups, max reps",sub:"One set, no rest.",opts:["0 - 5","6 - 15","16 - 30","30 +"],tier:true},
+ {key:"squats",ic:"puissance",q:"Squats, max reps",sub:"One set, no rest.",opts:["0 - 15","16 - 35","36 - 60","60 +"],tier:true},
+ {key:"plank",ic:"endurance",q:"Plank, max hold",sub:"Forearm plank.",opts:["under 15s","15 - 40s","40 - 70s","70s +"],tier:true},
+ {key:"bar",ic:"bar",q:"Pull-up bar access?",sub:"Park, doorway, anything.",opts:["Yes","No"]},
+ {key:"rhythm",ic:"flame",q:"Sessions per week",sub:"You can change later.",opts:["2","3","4","5"],val:[2,3,4,5]},
+ {key:"len",ic:"system",q:"Session length",sub:"Time you can give.",opts:["Quick ~10 min","Standard ~20 min","Long 30+ min"]}
+];
+function renderOnboarding(){
+ if(ob.step===0){app().innerHTML='<div class="screen center"><div style="margin-top:46px"></div>'+
+   '<div class="logo" style="font-size:40px">RE:<b>ARISE</b></div>'+
+   '<p class="eyebrow" style="margin-top:10px">Calisthenics &middot; Performance</p>'+
+   '<div class="bigico">'+icon("bolt",52)+'</div>'+
+   '<div class="card" style="text-align:left"><div class="eyebrow">Assessment Protocol</div>'+
+   '<p class="muted small" style="margin:8px 0 0">Ten quick taps. The System reads your level and sets your starting rank. Then a daily session, calibrated to you.</p></div>'+
+   '<button class="btn" onclick="ob.step=1;renderOnboarding()">Begin '+icon("back",16)+'</button></div>';return;}
+ if(ob.step>=1&&ob.step<=OBQ.length){var Q=OBQ[ob.step-1];
+   app().innerHTML='<div class="screen"><div class="eyebrow">Question '+ob.step+' / '+OBQ.length+'</div>'+
+   '<div class="progress" style="margin:10px 0 22px"><i style="width:'+(ob.step/OBQ.length*100)+'%"></i></div>'+
+   '<div class="bigico">'+icon(Q.ic,38)+'</div><h2 class="center">'+Q.q+'</h2><p class="muted small center">'+Q.sub+'</p>'+
+   '<div style="margin-top:18px">'+Q.opts.map(function(o,i){return '<button class="btn ghost" style="margin:8px 0" onclick="obPick(\''+Q.key+'\','+i+')">'+o+'</button>';}).join("")+'</div>'+
+   (ob.step>1?'<button class="btn ghost sm" style="margin-top:6px" onclick="ob.step--;renderOnboarding()">Back</button>':'')+'</div>';return;}
+ finishOnboarding();}
+function obPick(key,i){var Q=OBQ[ob.step-1];if(Q.tier)ob[key]=Math.min(2,i);else if(Q.val)ob[key]=Q.val[i];else ob[key]=i;ob.step++;renderOnboarding();}
+function finishOnboarding(){S=freshState(ob);save();view="home";
+ app().innerHTML='<div class="modal"><div class="modalbox"><div class="eyebrow">Assessment complete</div>'+
+   '<div class="rankbadge" style="margin:18px auto;width:84px;height:84px;font-size:42px;background:'+RANK_COLORS[0]+'">E</div>'+
+   '<h2>Rank E</h2><p class="muted small">Your starting point. Now climb.</p>'+
+   '<button class="btn" style="margin-top:18px" onclick="render()">Enter</button></div></div>';}
+function renderHome(){var need=xpForLevel(S.level),r=S.rank;
+ var statsHtml=Object.keys(STATS).map(function(s){var ti=statTier(s);return '<div class="stat"><div class="lab">'+icon(STATS[s].ic,15)+' '+STATS[s].name+'</div><div class="rk" style="margin-top:6px">T'+(ti+1)+'</div></div>';}).join("");
+ var main;
+ if(trialPending()){
+   main='<div class="eyebrow" style="margin-top:24px;color:var(--xp)">Rank-Up Trial</div>'+
+     '<div class="card trial"><div class="row"><span class="ico" style="color:var(--xp);border-color:var(--xp)">'+icon("star",20)+'</span>'+
+     '<div><b>Reached Level '+S.level+'</b><div class="dim tiny" style="margin-top:2px">Pass this harder trial to claim Rank '+RANKS[S.rank+1]+'</div></div></div>'+
+     '<button class="btn gold" style="margin-top:14px" onclick="startTrial()">Begin trial</button></div>';
+ } else if(S.completedToday){
+   main='<div class="eyebrow" style="margin-top:24px">Daily session</div>'+
+     '<div class="card center"><div class="bigico" style="color:var(--ok)">'+icon("trophy",38)+'</div><b>Session complete</b>'+
+     '<p class="muted small" style="margin-top:4px">Recovery in progress. Progress is built on rest too.</p></div>';
+ } else {
+   main='<div class="eyebrow" style="margin-top:24px">Daily session</div><div class="card">'+
+     S.quest.map(function(e){return '<div class="row between" style="padding:7px 0"><div class="row"><span class="ico" style="width:32px;height:32px">'+icon(e.ic,17)+'</span>'+
+     '<div><b>'+e.name+'</b><div class="dim tiny" style="margin-top:2px">'+e.sets+' &times; '+(e.type==="time"?e.target+"s":e.target+" reps")+(e.fam==="warmup"?'':' &middot; +'+perSetXP(e)+' XP/set')+'</div></div></div>'+
+     (e.done?'<span style="color:var(--ok)">'+icon("trophy",16)+'</span>':'')+'</div>';}).join('<div class="divider"></div>')+
+     '<button class="btn" style="margin-top:14px" onclick="view=\'session\';render()">'+(S.quest.some(function(e){return e.done;})?"Resume":"Start")+'</button></div>';
+ }
+ var bonus='<button class="btn bonusbtn" style="margin-top:6px" onclick="openBonus()">'+icon("plus",16)+' Bonus exercise ('+S.bonusToday+'/3)</button>';
+ app().innerHTML='<div class="screen">'+
+  '<div class="row between"><div><div class="logo">RE:<b>ARISE</b></div><div class="eyebrow" style="margin-top:3px">System Dashboard</div></div>'+
+  '<div class="pill" style="color:var(--accent2)">'+icon("flame",15)+' '+S.streak+'</div></div>'+
+  '<div class="card"><div class="row between"><div class="row"><div class="rankbadge" style="background:'+RANK_COLORS[r]+'">'+RANKS[r]+'</div>'+
+  '<div><div class="eyebrow">Rank '+RANKS[r]+'</div><b style="font-size:19px">Level '+S.level+'</b>'+
+  '<div class="dim tiny" style="margin-top:2px">'+(S.rank>=RANKS.length-1?"Max rank":levelsToNextRank()+" levels to Rank "+RANKS[S.rank+1])+'</div></div></div>'+
+  '<span class="tag">'+S.rhythm+' / wk</span></div>'+
+  '<div class="row between small" style="margin-top:14px"><span class="dim tiny" style="letter-spacing:1.5px">EXPERIENCE</span><span class="muted">'+S.xp+' / '+need+' XP</span></div>'+
+  '<div class="progress xpbar" style="margin-top:6px"><i style="width:'+Math.min(100,S.xp/need*100)+'%"></i></div></div>'+
+  '<div class="grid2">'+statsHtml+'</div>'+main+bonus+'</div>'+navBar();}
+
+function startTrial(){S.trial=genTrial();save();view="trial";render();}
+function renderSession(isTrial){var q=isTrial?S.trial:S.quest;var dn=q.filter(function(e){return e.done;}).length;
+ app().innerHTML='<div class="screen"><div class="row between"><button class="dots" style="position:static;color:var(--muted)" onclick="view=\'home\';render()">'+icon("back",20)+'</button>'+
+  '<div class="eyebrow"'+(isTrial?' style="color:var(--xp)"':'')+'>'+(isTrial?"Rank-Up Trial":"Daily session")+'</div><span class="muted small">'+dn+'/'+q.length+'</span></div>'+
+  '<div class="progress" style="margin:12px 0 16px"><i style="width:'+(dn/q.length*100)+'%"></i></div>'+
+  q.map(function(e,i){return exCard(e,i,isTrial);}).join("")+
+  (q.every(function(e){return e.done;})?'<button class="btn '+(isTrial?'gold':'ok')+'" onclick="'+(isTrial?'finishTrial()':'finishSession()')+'">'+(isTrial?"Claim Rank "+RANKS[S.rank+1]:"Complete session")+'</button>':'<p class="dim small center" style="margin-top:6px">Complete all sets to finish.</p>')+
+ '</div>'+navBar();}
+function exCard(e,i,isTrial){var sets;var isWarm=e.fam==="warmup";
+ if(e.done){sets='<div class="small" style="color:var(--ok);margin-top:10px;font-weight:800">'+(isWarm?'DONE':'SETS DONE &middot; +'+(perSetXP(e)*e.sets)+' XP')+'</div>';}
+ else{var arr=[];for(var s=0;s<e.sets;s++){var ok=s<e.doneSets;var act=e.type==="time"?("startTimer("+i+","+s+","+(isTrial?"true":"false")+")"):("validSet("+i+","+(isTrial?"true":"false")+")");
+   arr.push('<button class="setbtn '+(ok?"ok":"")+'" onclick="'+(ok?"":act)+'">'+(ok?icon("trophy",14):(isWarm?"Start":"Set "+(s+1)))+'</button>');}
+   sets='<div class="setdots">'+arr.join("")+'</div>';}
+ return '<div class="ex '+(e.done?"done":"")+'" id="ex'+i+'">'+
+  (e.fam!=="cardio"&&!isWarm&&!isTrial?'<button class="dots" onclick="openReplace('+i+')">&middot;&middot;&middot;</button>':'')+
+  '<div class="row"><span class="ico">'+icon(e.ic,19)+'</span><div><b>'+e.name+'</b> '+(!isWarm&&e.fam!=="cardio"?'<span class="tag" style="margin-left:4px">T'+(e.tier+1)+'</span>':'')+
+  '<div class="dim tiny" style="margin-top:3px">'+(isWarm?'1 &times; '+e.target+'s':'Target '+e.sets+' &times; '+(e.type==="time"?e.target+"s":e.target+" reps")+' &middot; +'+perSetXP(e)+' XP/set')+'</div></div></div>'+sets+'</div>';}
+function curList(isTrial){return isTrial?S.trial:S.quest;}
+function gainFor(e){return e.fam==="warmup"?10:perSetXP(e);}
+function validSet(i,isTrial){var e=curList(isTrial)[i];if(e.doneSets<e.sets){e.doneSets++;var g=gainFor(e);addXP(g);floatXP(i,g);if(e.doneSets>=e.sets)e.done=true;save();refreshEx(i,isTrial);}}
+function refreshEx(i,isTrial){var el=document.getElementById("ex"+i);if(el)el.outerHTML=exCard(curList(isTrial)[i],i,isTrial);
+  var q=curList(isTrial);if(q.every(function(e){return e.done;}))renderSession(isTrial);else{var pb=document.querySelector(".progress>i");if(pb)pb.style.width=(q.filter(function(e){return e.done;}).length/q.length*100)+"%";}}
+function floatXP(i,n){var el=document.getElementById("ex"+i);if(!el)return;var f=document.createElement("div");f.className="floaty";f.textContent="+"+n+" XP";f.style.right="14px";f.style.top="14px";el.appendChild(f);setTimeout(function(){f.remove();},1000);}
+var timerInt=null;
+function startTimer(i,s,isTrial){var e=curList(isTrial)[i];var left=e.target;var ov=document.createElement("div");ov.className="modal";ov.id="tmodal";
+  ov.innerHTML='<div class="modalbox"><div class="eyebrow">'+e.name+' &mdash; '+(e.fam==="warmup"?"Warm-up":"Set "+(s+1))+'</div><div class="timer" id="tval" style="margin:18px 0">'+left+'</div><button class="btn ghost sm" onclick="stopTimer()">Stop</button></div>';document.body.appendChild(ov);
+  timerInt=setInterval(function(){left--;var v=document.getElementById("tval");if(v)v.textContent=left;if(left<=0){clearInterval(timerInt);if(v)v.innerHTML=icon("trophy",46);setTimeout(function(){stopTimer();validSet(i,isTrial);},450);}},1000);}
+function stopTimer(){clearInterval(timerInt);var m=document.getElementById("tmodal");if(m)m.remove();}
+function openReplace(i){var e=S.quest[i],tree=TREES[e.fam];var opts=[];
+  if(e.tier>0)opts.push({tier:e.tier-1,lab:"Easier"});if(e.tier<tree.tiers.length-1&&e.tier<S.tiers[e.fam]+1)opts.push({tier:e.tier+1,lab:"Harder"});
+  var sib=Object.keys(TREES).filter(function(k){return k!==e.fam&&TREES[k].stat===tree.stat;})[0];
+  var ov=document.createElement("div");ov.className="overlay";ov.id="repov";ov.onclick=function(ev){if(ev.target===ov)ov.remove();};
+  var body=opts.map(function(o){var t=tree.tiers[o.tier];return '<button class="btn ghost" style="margin:8px 0;justify-content:flex-start;text-transform:none;font-weight:700" onclick="doReplace('+i+',\''+e.fam+'\','+o.tier+')"><span class="tag">'+o.lab+'</span> '+t.n+' <span class="tag">T'+(o.tier+1)+'</span></button>';}).join("");
+  if(sib&&S.tiers[sib]!==undefined){var st=Math.min(S.tiers[sib],5);body+='<button class="btn ghost" style="margin:8px 0;justify-content:flex-start;text-transform:none;font-weight:700" onclick="doReplace('+i+',\''+sib+'\','+st+')"><span class="tag">Other</span> '+TREES[sib].label+': '+TREES[sib].tiers[st].n+'</button>';}
+  ov.innerHTML='<div class="sheet"><div class="eyebrow">Replace exercise</div><p class="muted small" style="margin:8px 0 14px">Too hard, too easy, or no equipment? Pick a variant. Never stuck.</p>'+body+'<button class="btn" style="margin-top:6px" onclick="document.getElementById(\'repov\').remove()">Cancel</button></div>';
+  document.body.appendChild(ov);}
+function doReplace(i,fam,tier){S.quest[i]=mkEx(fam,tier,3,1);save();document.getElementById("repov").remove();renderSession(false);}
+function finishSession(){var mult=1+Math.min(0.5,S.streak*0.05),bonus=Math.round(40*mult);addXP(bonus);
+  if(S.lastDay!==today()){S.streak++;S.lastDay=today();}S.completedToday=true;S.sessions++;save();
+  app().innerHTML='<div class="modal"><div class="modalbox"><div class="bigico" style="color:var(--ok)">'+icon("trophy",46)+'</div><h2>Session complete</h2>'+
+    '<p class="muted small">Completion bonus &middot; multiplier &times;'+mult.toFixed(2)+'</p><div class="num" style="color:var(--xp);margin:12px 0">+'+bonus+' XP</div>'+
+    '<div class="pill" style="margin:0 auto;color:var(--accent2)">'+icon("flame",14)+' '+S.streak+' day streak</div>'+
+    (trialPending()?'<p class="small" style="margin-top:14px;color:var(--xp);font-weight:800">Rank-Up Trial unlocked!</p>':'')+
+    '<button class="btn" style="margin-top:14px" onclick="view=\'home\';render()">Continue</button></div></div>';}
+function finishTrial(){S.rank=Math.min(RANKS.length-1,S.rank+1);S.trial=null;if(S.lastDay!==today()){S.streak++;S.lastDay=today();}S.completedToday=true;S.sessions++;addXP(50);save();var r=S.rank;
+  app().innerHTML='<div class="modal"><div class="modalbox"><div class="bigico" style="color:var(--xp)">'+icon("star",46)+'</div><div class="eyebrow" style="color:var(--xp)">Rank-Up Trial passed</div>'+
+    '<h2 style="margin-top:6px">RANK UP</h2><div class="rankbadge" style="margin:16px auto;width:84px;height:84px;font-size:42px;background:'+RANK_COLORS[r]+'">'+RANKS[r]+'</div>'+
+    '<p class="muted small">You are now Rank '+RANKS[r]+'.</p><button class="btn gold" style="margin-top:16px" onclick="view=\'home\';render()">Continue</button></div></div>';}
+
+function openBonus(){if(S.bonusToday>=3){toast("Daily bonus limit reached (3/3)");return;}
+  var ov=document.createElement("div");ov.className="overlay";ov.id="bonusov";ov.onclick=function(ev){if(ev.target===ov)ov.remove();};
+  var fams=Object.keys(TREES).filter(function(f){return !(TREES[f].tiers[S.tiers[f]].bar&&!S.hasBar);});
+  var list=fams.map(function(f){var t=S.tiers[f];return '<button class="btn ghost" style="margin:8px 0;justify-content:flex-start;text-transform:none;font-weight:700" onclick="startBonus(\''+f+'\')">'+icon(TREES[f].ic,16)+' '+TREES[f].tiers[t].n+' <span class="tag">+XP</span></button>';}).join("");
+  ov.innerHTML='<div class="sheet"><div class="eyebrow">Bonus exercise &middot; '+S.bonusToday+'/3 today</div><p class="muted small" style="margin:8px 0 14px">Extra work, extra XP. Pick one. Max 3 per day.</p>'+list+'<button class="btn" style="margin-top:6px" onclick="document.getElementById(\'bonusov\').remove()">Cancel</button></div>';
+  document.body.appendChild(ov);}
+function startBonus(f){var b=document.getElementById("bonusov");if(b)b.remove();var e=mkEx(f,S.tiers[f],3,1);window.__bonus=e;renderBonus();}
+function renderBonus(){var e=window.__bonus;var arr=[];for(var s=0;s<e.sets;s++){var ok=s<e.doneSets;var act=e.type==="time"?("bonusTimer("+s+")"):("bonusSet()");
+   arr.push('<button class="setbtn '+(ok?"ok":"")+'" onclick="'+(ok?"":act)+'">'+(ok?icon("trophy",14):"Set "+(s+1))+'</button>');}
+ var done=e.done;
+ var ov=document.getElementById("bonusmodal");if(!ov){ov=document.createElement("div");ov.className="modal";ov.id="bonusmodal";document.body.appendChild(ov);}
+ ov.innerHTML='<div class="modalbox"><div class="eyebrow" style="color:var(--accent2)">Bonus exercise</div><div class="bigico" style="color:var(--accent2)">'+icon(e.ic,38)+'</div>'+
+   '<h2>'+e.name+'</h2><p class="muted small">Target '+e.sets+' &times; '+(e.type==="time"?e.target+"s":e.target+" reps")+' &middot; +'+perSetXP(e)+' XP/set</p>'+
+   (done?'<div class="num" style="color:var(--xp);margin:12px 0">+'+(perSetXP(e)*e.sets)+' XP</div><button class="btn ok" onclick="closeBonus()">Done</button>':'<div class="setdots" style="justify-content:center">'+arr.join("")+'</div><button class="btn ghost sm" style="margin-top:12px" onclick="closeBonus()">Cancel</button>')+'</div>';}
+function bonusSet(){var e=window.__bonus;if(e.doneSets<e.sets){e.doneSets++;addXP(perSetXP(e));if(e.doneSets>=e.sets){e.done=true;S.bonusToday++;}save();renderBonus();}}
+function bonusTimer(s){var e=window.__bonus;var left=e.target;var ov=document.getElementById("bonusmodal");
+  ov.innerHTML='<div class="modalbox"><div class="eyebrow">'+e.name+' &mdash; Set '+(s+1)+'</div><div class="timer" id="tval" style="margin:18px 0">'+left+'</div></div>';
+  timerInt=setInterval(function(){left--;var v=document.getElementById("tval");if(v)v.textContent=left;if(left<=0){clearInterval(timerInt);bonusSet();}},1000);}
+function closeBonus(){var m=document.getElementById("bonusmodal");if(m)m.remove();window.__bonus=null;renderHome();}
+function renderChar(){var r=S.rank;
+ var statsHtml=Object.keys(STATS).map(function(s){var ti=statTier(s);return '<div class="stat"><div class="lab">'+icon(STATS[s].ic,15)+' '+STATS[s].name+'</div>'+
+   '<div class="rk" style="margin-top:6px">T'+(ti+1)+'</div><div class="progress" style="margin-top:8px"><i style="width:'+((ti+1)/6*100)+'%"></i></div></div>';}).join("");
+ app().innerHTML='<div class="screen"><div class="center" style="margin-top:4px"><div class="rankbadge" style="width:78px;height:78px;font-size:36px;margin:0 auto;background:'+RANK_COLORS[r]+'">'+RANKS[r]+'</div>'+
+  '<h2 style="margin-top:12px">Rank '+RANKS[r]+'</h2><div class="dim small" style="margin-top:2px">Level '+S.level+' &middot; '+S.sessions+' sessions &middot; '+S.totalXP+' XP total</div>'+
+  '<div class="dim tiny" style="margin-top:2px">'+(S.rank>=RANKS.length-1?"Max rank reached":levelsToNextRank()+" levels to Rank "+RANKS[S.rank+1])+'</div></div>'+
+  '<div class="grid2" style="margin-top:18px">'+statsHtml+'</div>'+
+  '<div class="card"><div class="row between"><div class="row">'+icon("bar",18)+'<b>Pull-up bar</b></div>'+
+  '<button class="setbtn '+(S.hasBar?"ok":"")+'" style="flex:0;min-width:88px" onclick="S.hasBar=!S.hasBar;save();renderChar()">'+(S.hasBar?"Enabled":"Enable")+'</button></div>'+
+  '<p class="dim small" style="margin:10px 0 0">Enable if you have access to a bar (park, doorway) to unlock the Pull branch.</p></div>'+
+  '<div class="eyebrow" style="margin-top:22px">Movement trees</div><p class="dim tiny" style="margin-top:4px">Unlock harder moves to upgrade your daily sessions. (Rank is set by your level.)</p>'+
+  Object.keys(TREES).map(function(f){return treeBlock(f);}).join("")+
+  '<button class="btn ghost sm" style="margin-top:18px" onclick="if(confirm(\'Reset all progress?\')){localStorage.removeItem(KEY);location.reload();}">Reset progress</button></div>'+navBar();}
+function treeBlock(f){var tree=TREES[f],cur=S.tiers[f];
+ var head=cur<5?('<button class="setbtn '+((tree.tiers[cur+1].bar&&!S.hasBar)?"":"ok")+'" style="flex:0;min-width:104px" onclick="unlockMove(\''+f+'\')">Unlock T'+(cur+2)+'</button>'):('<span class="tag" style="color:'+RANK_COLORS[5]+';border-color:'+RANK_COLORS[5]+'">MAXED</span>');
+ var nodes=tree.tiers.map(function(t,i){return '<div class="node '+(i<=cur?"unlocked":"")+' '+(i===cur+1?"next":"")+'"><div class="nr">T'+(i+1)+'</div><div>'+t.n+'</div></div>';}).join("");
+ var warn=(cur<5&&tree.tiers[cur+1].bar&&!S.hasBar)?'<p class="dim tiny" style="margin:10px 0 0">Enable the bar to progress.</p>':"";
+ return '<div class="card"><div class="row between"><div class="row">'+icon(tree.ic,17)+'<b>'+tree.label+'</b></div>'+head+'</div><div class="tree">'+nodes+'</div>'+warn+'</div>';}
+function unlockMove(f){var tree=TREES[f],next=S.tiers[f]+1;if(next>5)return;var t=tree.tiers[next];
+ if(t.bar&&!S.hasBar){toast("Enable the bar first");return;}var goal=targetFor(f,next);
+ var ov=document.createElement("div");ov.className="modal";ov.id="rtest";
+ ov.innerHTML='<div class="modalbox"><div class="eyebrow">Unlock move &mdash; '+tree.label+'</div><div class="bigico">'+icon(tree.ic,40)+'</div><h2>'+t.n+'</h2>'+
+   '<p class="muted small">Hit <b>'+(goal.type==="time"?goal.val+"s":goal.val+" clean reps")+'</b> to unlock tier T'+(next+1)+'.</p>'+
+   '<button class="btn ok" style="margin-top:12px" onclick="passUnlock(\''+f+'\')">Done it</button>'+
+   '<button class="btn ghost sm" style="margin-top:8px" onclick="document.getElementById(\'rtest\').remove()">Not yet</button></div>';document.body.appendChild(ov);}
+function passUnlock(f){S.tiers[f]=Math.min(5,S.tiers[f]+1);addXP(60);save();var r=S.tiers[f],tree=TREES[f];
+ document.getElementById("rtest").innerHTML='<div class="modalbox"><div class="bigico" style="color:var(--xp)">'+icon("up",44)+'</div><h2>Move unlocked</h2>'+
+   '<p class="muted small">'+tree.label+' &rarr; <b>'+tree.tiers[r].n+'</b> (T'+(r+1)+')</p><div class="num" style="color:var(--xp)">+60 XP</div>'+
+   '<button class="btn" style="margin-top:16px" onclick="document.getElementById(\'rtest\').remove();renderChar()">Continue</button></div>';}
+function navBar(){return '<div class="nav"><button class="'+(view==="char"?"":"act")+'" onclick="view=\'home\';render()">'+icon("system",19)+'System</button>'+
+  '<button class="'+(view==="char"?"act":"")+'" onclick="view=\'char\';render()">'+icon("profile",19)+'Athlete</button></div>';}
+load();render();
+</script>
+</body>
+</html>
