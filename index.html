@@ -242,7 +242,7 @@ function renderHome(){var need=xpForLevel(S.level),r=S.rank;
  var bonus='<button class="btn bonusbtn" style="margin-top:6px" onclick="openBonus()">'+icon("plus",16)+' Bonus exercise ('+S.bonusToday+'/3)</button>';
  app().innerHTML='<div class="screen">'+
   '<div class="row between"><div class="row" style="gap:10px"><span onclick="openSettings()" style="cursor:pointer;color:var(--muted);flex:0 0 auto">'+icon("gear",22)+'</span><div><div class="eyebrow">Welcome back</div><div style="font-weight:800;font-size:18px;margin-top:2px">'+S.name+'</div><div class="dim tiny" style="margin-top:2px">'+TITLES[S.rank]+'</div></div></div>'+
-  '<div class="pill" style="color:var(--accent2)">'+icon("flame",15)+' '+S.streak+'</div></div>'+installBtnHome()+
+  '<div class="pill" style="color:var(--accent2)">'+icon("flame",15)+' '+S.streak+'</div></div>'+
   '<div class="card"><div class="row between"><div class="row"><img src="'+IMG[S.gender+"_"+RANKS[r]]+'" alt="" style="width:50px;height:50px;border-radius:12px;object-fit:cover;object-position:50% 18%;border:1px solid var(--line2)">'+
   '<div><div class="eyebrow">Hunter Rank '+RANKS[r]+'</div><b style="font-size:19px">Level '+S.level+'</b>'+
   '<div class="dim tiny" style="margin-top:2px">'+(S.rank>=RANKS.length-1?"Max rank":(trialPending()?"Rank-Up Trial ready":"Raise your stats to rank up"))+'</div></div></div>'+
@@ -473,7 +473,7 @@ function openSettings(){var ov=document.createElement("div");ov.className="overl
   '<div class="row between" style="margin-top:16px"><b>Pull-up bar</b><button class="setbtn '+(S.hasBar?"ok":"")+'" style="flex:0;min-width:84px" onclick="toggleBar()">'+(S.hasBar?"Yes":"No")+'</button></div>'+
   '<div class="row between" style="margin-top:12px"><b>Sound & vibration</b><button class="setbtn '+(S.sound?"ok":"")+'" style="flex:0;min-width:84px" onclick="toggleSound()">'+(S.sound?"On":"Off")+'</button></div>'+
   '<button class="btn" style="margin-top:18px" onclick="setName()">Save & close</button>'+
-  '<button class="btn gold" style="margin-top:8px" onclick="installApp()">Install app on phone</button>'+
+  
   '<button class="btn ghost sm" style="margin-top:8px" onclick="if(confirm(\'Reset all progress?\')){localStorage.removeItem(KEY);location.reload();}">Reset progress</button>'+
   '</div>';
  document.body.appendChild(ov);}
@@ -499,6 +499,7 @@ function weekId(){var d=new Date();var oneJan=new Date(d.getFullYear(),0,1);var 
 function weekCard(){var goal=S.rhythm||3;var done=S.weekSessions||0;var pct=Math.min(100,Math.round(done/goal*100));return '<div class="eyebrow" style="margin-top:22px">Weekly quest</div><div class="card"><div class="row between"><b>'+done+' / '+goal+' sessions this week</b>'+(S.weekDone?'<span class="tag" style="color:var(--ok);border-color:var(--ok)">Done</span>':'<span class="tag">+150 XP</span>')+'</div><div class="progress" style="margin-top:10px"><i style="width:'+pct+'%"></i></div></div>';}
 function careerCard(){return '<div class="eyebrow" style="margin-top:22px">Career</div><div class="card"><div class="grid2"><div><div class="dim tiny">Sessions</div><div style="font-weight:800;font-size:18px">'+(S.sessions||0)+'</div></div><div><div class="dim tiny">Total reps</div><div style="font-weight:800;font-size:18px">'+(S.totalReps||0)+'</div></div><div><div class="dim tiny">Total XP</div><div style="font-weight:800;font-size:18px">'+(S.totalXP||0)+'</div></div><div><div class="dim tiny">Best streak</div><div style="font-weight:800;font-size:18px">'+(S.maxStreak||0)+' d</div></div></div></div>';}
 function navBar(){var sys=(view!=="char"&&view!=="rewards"&&view!=="library");return '<div class="nav">'+'<button class="'+(sys?"act":"")+'" onclick="view=\'home\';render()">'+icon("system",18)+'System</button>'+'<button class="'+(view==="char"?"act":"")+'" onclick="view=\'char\';render()">'+icon("profile",18)+'Hunter</button>'+'<button class="'+(view==="library"?"act":"")+'" onclick="view=\'library\';render()">'+icon("book",18)+'Moves</button>'+'<button class="'+(view==="rewards"?"act":"")+'" onclick="view=\'rewards\';render()">'+icon("trophy",18)+'Badges</button></div>';}
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
 load();render();
 </script>
 </body>
