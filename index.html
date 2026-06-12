@@ -474,9 +474,10 @@ function openSettings(){var ov=document.createElement("div");ov.className="overl
  var gender=seg("Character",'<button class="'+(S.gender==="m"?"sel":"")+'" onclick="setGender(\'m\')">Male</button><button class="'+(S.gender==="f"?"sel":"")+'" onclick="setGender(\'f\')">Female</button>');
  var days=seg("Days per week",[2,3,4,5].map(function(n){return '<button class="'+(S.rhythm===n?"sel":"")+'" onclick="setRhythm('+n+')">'+n+'</button>';}).join(""));
  var len=seg("Session length",["Quick","Standard","Long"].map(function(l,i){return '<button class="'+(S.len===i?"sel":"")+'" onclick="setLen('+i+')">'+l+'</button>';}).join(""));
+ var langSeg=seg("Language / Langue",LANGS.map(function(l){return '<button class="'+(S.lang===l.c?"sel":"")+'" style="min-width:auto;font-size:13px;padding:12px 6px" onclick="setAppLang(\''+l.c+'\')">'+l.f+' '+l.c.toUpperCase()+'</button>';}).join(""));
  ov.innerHTML='<div class="sheet"><div class="eyebrow">Settings</div>'+
   '<div style="margin-top:14px"><div class="dim tiny" style="margin-bottom:6px">Hunter name</div><input id="nameIn" value="'+nm+'" maxlength="16" style="width:100%;padding:12px;border-radius:10px;background:var(--surface2);border:1px solid var(--line2);color:var(--text);font-weight:700;font-size:15px"></div>'+
-  gender+days+len+
+  gender+days+len+langSeg+
   '<div class="row between" style="margin-top:16px"><b>Pull-up bar</b><button class="setbtn '+(S.hasBar?"ok":"")+'" style="flex:0;min-width:84px" onclick="toggleBar()">'+(S.hasBar?"Yes":"No")+'</button></div>'+
   '<div class="row between" style="margin-top:12px"><b>Sound & vibration</b><button class="setbtn '+(S.sound?"ok":"")+'" style="flex:0;min-width:84px" onclick="toggleSound()">'+(S.sound?"On":"Off")+'</button></div>'+
   '<button class="btn" style="margin-top:18px" onclick="setName()">Save & close</button>'+
@@ -490,6 +491,7 @@ function setRhythm(n){sg();S.rhythm=n;save();reopenSet();}
 function setLen(i){sg();S.len=i;S.questDate=null;save();reopenSet();}
 function toggleBar(){sg();S.hasBar=!S.hasBar;save();reopenSet();}
 function toggleSound(){sg();S.sound=!S.sound;save();if(S.sound)sfx("set");reopenSet();}
+function setAppLang(c){if(typeof sg==="function")sg();S.lang=c;save();render();reopenSet();}
 function reopenSet(){var m=document.getElementById("setov");if(m)m.remove();openSettings();}
 function setName(){sg();save();var m=document.getElementById("setov");if(m)m.remove();render();}
 var deferredPrompt=null;
