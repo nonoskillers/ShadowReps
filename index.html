@@ -550,7 +550,7 @@ function trStr(s){var L=curLang();if(L==="en-us"||L==="en-gb")return s;var k=s.t
 function translateAll(){var L=curLang();if(L==="en-us"||L==="en-gb"||!document.body)return;var wk=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false);var arr=[],n;while(n=wk.nextNode())arr.push(n);for(var i=0;i<arr.length;i++){var t=arr[i],v=t.nodeValue;if(v&&v.trim()){var nv=trStr(v);if(nv!==v)t.nodeValue=nv;}}}
 var _mo=null;function startI18N(){if(_mo||typeof MutationObserver==="undefined")return;translateAll();_mo=new MutationObserver(function(){_mo.disconnect();translateAll();_mo.observe(document.body,{childList:true,subtree:true,characterData:true});});_mo.observe(document.body,{childList:true,subtree:true,characterData:true});}
 function navBar(){var sys=(view!=="char"&&view!=="rewards"&&view!=="library");return '<div class="nav">'+'<button class="'+(sys?"act":"")+'" onclick="view=\'home\';render()">'+icon("system",18)+'System</button>'+'<button class="'+(view==="char"?"act":"")+'" onclick="view=\'char\';render()">'+icon("profile",18)+'Hunter</button>'+'<button class="'+(view==="library"?"act":"")+'" onclick="view=\'library\';render()">'+icon("book",18)+'Moves</button>'+'<button class="'+(view==="rewards"?"act":"")+'" onclick="view=\'rewards\';render()">'+icon("trophy",18)+'Badges</button></div>';}
-if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
+if("serviceWorker" in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});}).catch(function(){});}
 load();render();startI18N();
 </script>
 </body>
