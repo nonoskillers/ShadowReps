@@ -580,7 +580,7 @@ function openSettings(){var ov=document.createElement("div");ov.className="overl
   '<button class="btn" style="margin-top:18px" onclick="setName()">Save & close</button>'+
   
   '<div class="row" style="gap:8px;margin-top:14px"><button class="btn ghost sm" style="flex:1" onclick="exportSave()">Export</button><button class="btn ghost sm" style="flex:1" onclick="importSave()">Import</button></div>'+
-  '<button class="btn ghost sm" style="margin-top:8px" onclick="if(confirm(\'Reset all progress?\')){localStorage.removeItem(KEY);location.reload();}">Reset progress</button>'+'<div class="dim tiny" style="text-align:center;margin-top:12px;opacity:.6">RE:ARISE · build 73</div>'+
+  '<button class="btn ghost sm" style="margin-top:8px" onclick="if(confirm(\'Reset all progress?\')){localStorage.removeItem(KEY);location.reload();}">Reset progress</button>'+'<div class="dim tiny" style="text-align:center;margin-top:12px;opacity:.6">RE:ARISE · build 74</div>'+
   '</div>';
  document.body.appendChild(ov);}
 function sg(){var v=document.getElementById("nameIn");if(v){var n=(v.value||"").trim().slice(0,16);S.name=n||"Hunter";}}
@@ -721,7 +721,7 @@ var ARMAP={
 (function(){for(var k in ARMAP){if(EXACT[k]){EXACT[k].ar=ARMAP[k];}else if(SUB[k]){SUB[k].ar=ARMAP[k];}else{EXACT[k]={ar:ARMAP[k]};}}})();
 Object.assign(EXACT,{
 "Install the app":{en:"Install the app",fr:"Installer l'app",es:"Instalar la app",pt:"Instalar o app",it:"Installa l'app",de:"App installieren",ja:"アプリをインストール",he:"התקנת האפליקציה",ar:"تثبيت التطبيق"},
-"Tap Share, then 'Add to Home Screen'.":{fr:"Touche Partager, puis « Sur l'écran d'accueil ».",es:"Toca Compartir y luego 'Añadir a pantalla de inicio'.",pt:"Toque em Compartilhar e depois 'Adicionar à Tela de Início'.",it:"Tocca Condividi, poi 'Aggiungi a Home'.",de:"Tippe auf Teilen, dann 'Zum Home-Bildschirm'.",ja:"共有をタップして「ホーム画面に追加」を選んでください。",he:"הקש על שיתוף ואז 'הוסף למסך הבית'.",ar:"اضغط على مشاركة ثم 'أضف إلى الشاشة الرئيسية'."},
+"Tap Share, then 'Add to Home Screen'.":{fr:"Touche Partager, fais défiler, puis « Sur l'écran d'accueil ».",es:"Toca Compartir y luego 'Añadir a pantalla de inicio'.",pt:"Toque em Compartilhar e depois 'Adicionar à Tela de Início'.",it:"Tocca Condividi, poi 'Aggiungi a Home'.",de:"Tippe auf Teilen, dann 'Zum Home-Bildschirm'.",ja:"共有をタップして「ホーム画面に追加」を選んでください。",he:"הקש על שיתוף ואז 'הוסף למסך הבית'.",ar:"اضغط على مشاركة ثم 'أضف إلى الشاشة الرئيسية'."},
 "Later":{fr:"Plus tard",es:"Más tarde",pt:"Mais tarde",it:"Più tardi",de:"Später",ja:"後で",he:"אחר כך",ar:"لاحقاً"},
 "Install":{fr:"Installer",es:"Instalar",pt:"Instalar",it:"Installa",de:"Installieren",ja:"インストール",he:"התקן",ar:"تثبيت"}
 });
@@ -762,13 +762,13 @@ function pageHead(eyebrow,title){return '<div class="row between" style="margin-
 function navBar(){var sys=(view!=="char"&&view!=="rewards"&&view!=="library");return '<div class="nav">'+'<button class="'+(sys?"act":"")+'" onclick="view=\'home\';render()">'+icon("system",18)+'System</button>'+'<button class="'+(view==="char"?"act":"")+'" onclick="view=\'char\';render()">'+icon("profile",18)+'Hero</button>'+'<button class="'+(view==="library"?"act":"")+'" onclick="view=\'library\';render()">'+icon("book",18)+'Moves</button>'+'<button class="'+(view==="rewards"?"act":"")+'" onclick="view=\'rewards\';render()">'+icon("trophy",18)+'Badges</button></div>';}
 function isIOSdev(){return /iphone|ipad|ipod/i.test(navigator.userAgent||"")&&!window.MSStream;}
 function isStandalonePWA(){try{return (window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;}catch(e){return false;}}
-var _deferredPrompt=null,_instShown=false;
-function maybeShowInstall(){if(_instShown||typeof document==="undefined")return;if(isStandalonePWA())return;try{if(localStorage.getItem("rearise_inst_x"))return;}catch(e){}if(_deferredPrompt){showInstallBar("android");}else if(isIOSdev()){setTimeout(function(){if(!_instShown&&!isStandalonePWA())showInstallBar("ios");},1400);}}
+var _deferredPrompt=null,_instShown=false,_instDismissed=false;
+function maybeShowInstall(){if(_instShown||typeof document==="undefined")return;if(isStandalonePWA())return;if(_instDismissed)return;if(_deferredPrompt){showInstallBar("android");}else if(isIOSdev()){setTimeout(function(){if(!_instShown&&!isStandalonePWA()&&!_instDismissed)showInstallBar("ios");},400);}}
 function showInstallBar(kind){if(_instShown||document.getElementById("installbar"))return;_instShown=true;var d=document.createElement("div");d.className="installbar";d.id="installbar";var ic='<img src="icon-192.png" onerror="this.style.display=&quot;none&quot;" style="width:36px;height:36px;border-radius:9px;flex:0 0 auto">';
  if(kind==="ios"){d.innerHTML='<div class="ib-row">'+ic+'<div><b style="font-size:14px">Install the app</b><div class="dim tiny" style="margin-top:2px">Tap Share, then \'Add to Home Screen\'.</div></div></div><div class="ib-actions"><button class="btn ghost sm setmini" onclick="dismissInstall()">Later</button></div>';document.body.appendChild(d);var ar=document.createElement("div");ar.className="ib-arrow";ar.id="ibarrow";ar.textContent="▾";document.body.appendChild(ar);}
  else{d.innerHTML='<div class="ib-row">'+ic+'<div><b style="font-size:14px">Install the app</b><div class="dim tiny" style="margin-top:2px">RE:ARISE</div></div></div><div class="ib-actions"><button class="btn ghost sm setmini" onclick="dismissInstall()">Later</button><button class="btn" style="flex:0;min-width:auto;padding:9px 18px" onclick="doInstall()">Install</button></div>';document.body.appendChild(d);}
  if(typeof translateAll==="function")translateAll();}
-function dismissInstall(){try{localStorage.setItem("rearise_inst_x","1");}catch(e){}var b=document.getElementById("installbar");if(b)b.remove();var a=document.getElementById("ibarrow");if(a)a.remove();}
+function dismissInstall(){_instDismissed=true;var b=document.getElementById("installbar");if(b)b.remove();var a=document.getElementById("ibarrow");if(a)a.remove();}
 function doInstall(){if(_deferredPrompt){_deferredPrompt.prompt();_deferredPrompt.userChoice.then(function(){dismissInstall();});}else{dismissInstall();}}
 function triggerInstall(){var s=document.getElementById("setov");if(s)s.remove();if(_deferredPrompt){_deferredPrompt.prompt();_deferredPrompt.userChoice.then(function(){_deferredPrompt=null;});}else if(typeof isIOSdev==="function"&&isIOSdev()){try{localStorage.removeItem("rearise_inst_x");}catch(e){}_instShown=false;var b=document.getElementById("installbar");if(b)b.remove();showInstallBar("ios");}else{if(typeof toast==="function")toast("Open your browser menu, then 'Install app'.");}}
 function setupInstall(){maybeShowInstall();}
