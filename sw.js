@@ -1,4 +1,4 @@
-var CACHE = "rearise-v111";
+var CACHE = "rearise-v112";
 var CORE = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", function (e) {
   self.skipWaiting();
@@ -11,16 +11,33 @@ self.addEventListener("activate", function (e) {
     }).then(function () { return self.clients.claim(); })
   );
 });
+function isHTML(req) {
+  if (req.mode === "navigate") return true;
+  var u = req.url.split("?")[0];
+  return u.indexOf("index.html") >= 0 || u.indexOf("sw.js") >= 0 || /\/$/.test(u);
+}
 self.addEventListener("fetch", function (e) {
   var req = e.request;
   if (req.method !== "GET") return;
-  e.respondWith(
-    fetch(req).then(function (res) {
-      var copy = res.clone();
-      caches.open(CACHE).then(function (c) { c.put(req, copy); }).catch(function () {});
-      return res;
-    }).catch(function () {
-      return caches.match(req).then(function (m) { return m || caches.match("./index.html"); });
-    })
-  );
+  if (isHTML(req)) {
+    e.respondWith(
+      fetch(req, { cache: "no-store" }).then(function (res) {
+        var copy = res.clone();
+        caches.open(CACHE).then(function (c) { c.put(req, copy); }).catch(function () {});
+        return res;
+      }).catch(function () {
+        return caches.match(req).then(function (m) { return m || caches.match("./index.html"); });
+      })
+    );
+  } else {
+    e.respondWith(
+      caches.match(req).then(function (m) {
+        return m || fetch(req).then(function (res) {
+          var copy = res.clone();
+          caches.open(CACHE).then(function (c) { c.put(req, copy); }).catch(function () {});
+          return res;
+        });
+      })
+    );
+  }
 });
