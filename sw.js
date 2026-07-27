@@ -1,4 +1,4 @@
-var CACHE = "rearise-v195";
+var CACHE = "rearise-v197";
 var CORE = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./music_menu.mp3", "./music_collection.mp3"];
 self.addEventListener("install", function (e) {
   self.skipWaiting();
